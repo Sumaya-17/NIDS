@@ -9,6 +9,7 @@ import plotly.express as px
 import plotly.figure_factory as ff
 
 BASE_DIR = Path(__file__).resolve().parent
+GRAPH_DATA_PATH = BASE_DIR / 'data' / 'cicids2017_sample.csv'
 
 app = Flask(__name__)
 CORS(app)
@@ -276,7 +277,7 @@ def result():
 
 @app.route('/graph1')
 def graph1():
-    intro = pd.read_csv(BASE_DIR / 'cicids2017_cleaned.csv')
+    intro = pd.read_csv(GRAPH_DATA_PATH)
     
     label_counts = intro['Attack Type'].value_counts().reset_index()
     label_counts.columns = ['Attack Type', 'Count']
@@ -295,7 +296,7 @@ def graph1():
 
 @app.route('/graph2')
 def graph2():
-    intro = pd.read_csv(BASE_DIR / 'cicids2017_cleaned.csv')
+    intro = pd.read_csv(GRAPH_DATA_PATH)
     
     fig = px.histogram(
         intro,
@@ -311,7 +312,7 @@ def graph2():
 
 @app.route('/graph3')
 def graph3():
-    intro = pd.read_csv(BASE_DIR / 'cicids2017_cleaned.csv')
+    intro = pd.read_csv(GRAPH_DATA_PATH)
     
     fig = px.box(
         intro,
@@ -328,7 +329,7 @@ def graph3():
 
 @app.route('/graph4')
 def graph4():
-    intro = pd.read_csv(BASE_DIR / 'cicids2017_cleaned.csv')
+    intro = pd.read_csv(GRAPH_DATA_PATH)
     
     attack_counts = intro['Attack Type'].value_counts().reset_index()
     attack_counts.columns = ['Attack Type', 'Count']

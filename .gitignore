@@ -4,5 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 *.db
 Flask_App/instance/*.db
+Flask_App/cicids2017_cleaned.csv
+Machine Learning/cicids2017_cleaned.csv
 .env
 .venv/
