@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register | Aegis5G Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nids-ui.css') }}">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card">
+      <div class="row g-0">
+        <div class="col-lg-5">
+          <div class="auth-side d-flex flex-column justify-content-between p-4 p-md-5">
+            <a class="d-flex align-items-center gap-3" href="{{ url_for('index') }}">
+              <span class="brand-mark">A5</span>
+              <span class="brand-copy">
+                <strong>Aegis5G</strong>
+                <span>Account setup</span>
+              </span>
+            </a>
+            <div>
+              <p class="eyebrow fw-bold mb-2">Security onboarding</p>
+              <h1 class="display-6 fw-bold">Create access.</h1>
+              <p class="mb-0 text-muted-soft">Register once, then move into the AI intrusion detection console.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="p-4 p-md-5">
+            <p class="eyebrow fw-bold mb-2">Protected workspace</p>
+            <h2 class="h3 fw-bold mb-2">Register for Aegis5G</h2>
+            <p class="text-muted-soft mb-4">Create a local account for the Flask application.</p>
+            {% if message %}
+            <div class="alert alert-danger">{{ message }}</div>
+            {% endif %}
+            <form class="auth-form" action="/register" method="POST">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Username</label>
+                <input type="text" class="form-control" name="username" placeholder="Choose username" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Create password" required>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-bold">Confirm Password</label>
+                <input type="password" class="form-control" name="password2" placeholder="Confirm password" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg w-100">Authenticate</button>
+            </form>
+            <p class="mt-4 mb-0 text-muted-soft">Already registered? <a class="fw-bold text-decoration-underline" href="{{ url_for('login') }}">Login here</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="{{ url_for('static', filename='js/nids-ui.js') }}"></script>
+</body>
+</html>

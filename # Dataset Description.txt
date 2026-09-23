@@ -1,0 +1,489 @@
+# Dataset Description
+## **The dataset has been Netduced by the below-mentioned researches:**
+- E. C. P. Neto, S. Dadkhah, R. Ferreira, A. Zohourian, R. Lu, A. A. Ghorbani. "CICIoT2023: A real-time dataset and benchmark for large-scale attacks in IoT environment," Sensor (2023) – (submitted to Journal of Sensors).
+- The present data contains different kinds of IoT intrusions. The categories of the IoT intrusions enlisted in the data are as follows:
+- DDoS
+- Brute Force
+- Spoofing
+- DoS
+- Recon
+- Web-based
+- Mirai
+
+There are several subcategories are present in the data for each kind of intrusion types in the IoT. The dataset contains 1191264 instances of network for intrusions and 47 features of each of the intrusions. The dataset can be used to prepare the predictive model through which different kind of intrusive attacks can be detected. The data is also suitable for designing the IDS system.
+# Abbreviations
+```markdown
+
+|Column Name	| Abbreviation	| Explanation |
+|---------------|---------------|-------------|
+|flow_duration	|FD	            |Total duration of the flow (in seconds) between two network endpoints.|
+|Header_Length	|HL	|The total length of the packet headers in bytes.|
+|Protocol Type	|PT	|Indicates the type of protocol used in the network traffic (e.g., TCP, UDP, ICMP).|
+|Duration	|D |	The duration for which the network connection was active.|
+|Rate	|R	|The rate of data transmission (e.g., packets per second or bytes per second).|
+|Srate	|SR|	Source rate; data transmission rate from the source device.|
+|Drate	|DR	|Destination rate; data transmission rate to the destination device.|
+|fin_flag_number	|FFN	|The count of FIN flags in TCP packets (used to signal the end of data transmission).|
+|syn_flag_number	|SFN	|The count of SYN flags in TCP packets (used to initiate connections).|
+|rst_flag_number	|RFN	|The count of RST flags in TCP packets (used to reset connections).|
+|psh_flag_number	|PFN	|The count of PSH flags in TCP packets (used to push buffered data).|
+|ack_flag_number	|AFN	|The count of ACK flags in TCP packets (used to acknowledge receipt of data).|
+|ece_flag_number	|EFN	|The count of ECE flags in TCP packets (used in Explicit Congestion Notification).|
+|cwr_flag_number	|CFN	|The count of CWR flags in TCP packets (used to indicate congestion control).|
+|ack_count	|AC	|Total number of acknowledgment packets in the flow.|
+|syn_count	|SC	|Total number of SYN packets in the flow.|
+|fin_count	|FC	|Total number of FIN packets in the flow.|
+|urg_count	|UC	|Total number of URG flags (used to indicate urgent data).|
+|rst_count	|RC	|Total number of RST packets used to reset connections.|
+|HTTP	|HTTP	|Binary indicator (0 or 1) if the protocol used is HTTP.|
+|HTTPS	|HTTPS	|Binary indicator (0 or 1) if the protocol used is HTTPS.|
+|DNS	|DNS	|Binary indicator (0 or 1) if the protocol used is DNS.|
+|Telnet	|TEL	|Binary indicator (0 or 1) if the protocol used is Telnet.|
+|SMTP	|SMTP	|Binary indicator (0 or 1) if the protocol used is SMTP (used for email transmission).|
+|SSH	|SSH	|Binary indicator (0 or 1) if the protocol used is SSH (used for secure remote access).|
+|IRC	|IRC	|Binary indicator (0 or 1) if the protocol used is IRC (Internet Relay Chat).|
+|TCP	|TCP	|Binary indicator (0 or 1) if the protocol used is TCP.|
+|UDP	|UDP	|Binary indicator (0 or 1) if the protocol used is UDP.|
+|DHCP	|DHCP	|Binary indicator (0 or 1) if the protocol used is DHCP (used for dynamic IP allocation).|
+|ARP	|ARP	|Binary indicator (0 or 1) if the protocol used is ARP (used for IP to MAC address mapping).|
+|ICMP	|ICMP	|Binary indicator (0 or 1) if the protocol used is ICMP (used for error reporting).|
+|IPv	|IPv	|Binary indicator (0 or 1) if the protocol used is IPv (Internet Protocol version).|
+|LLC	|LLC	|Binary indicator (0 or 1) if the protocol used is LLC (Logical Link Control).|
+|Tot sum	|TS	|Total sum of packets transmitted during the flow.|
+|Min	|Min	|Minimum packet size during the flow.|
+|Max	|Max	|Maximum packet size during the flow.|
+|AVG	|Avg	|Average packet size during the flow.|
+|Std	|Std	|Standard deviation of the packet sizes in the flow.|
+|Tot size	|TSize|	Total size of all packets transmitted during the flow.|
+|IAT	|IAT|	Inter-arrival time between consecutive packets in the flow.|
+|Number	|N	|Total number of packets in the flow.|
+|Magnitue	|Mag|	Magnitude of the packet sizes, reflecting data volume.|
+|Radius	|Rad|	|Measure of the radius, which could indicate the spread or distribution of flow data.|
+|Covariance	|Cov|	Covariance of packet sizes or data metrics over time.|
+|Variance	|Var|	Variance of packet sizes or data metrics over time.|
+|Weight	W	|A| measure that could represent the importance or contribution of a flow metric.|
+|label	|Label|	The target label or class associated with the flow (e.g., normal, anomaly).|
+
+```
+# Important Librarys
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import klib as kl
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+pd.set_option('display.max_columns', None)
+# Load Dataset
+Net = pd.read_csv('IoT_Intrusion.csv',low_memory = False)
+# Data Pre-processing
+Net
+Net.head()
+Net.tail()
+Net.info()
+Net.columns
+Net.describe()
+Net.shape
+Net.size
+Net['label'].unique()
+Net.isnull().sum()
+Net.isnull().any()
+# remove the rows with missing values
+
+kl.missingval_plot(Net,figsize=(6,5))
+Net.describe().T
+Net.describe(include='object')
+Net.describe(include='int')
+Net['label'].unique()
+Net['label'].nunique()
+# Data Visualization
+plt.figure(figsize=(10, 6))
+sns.histplot(Net['flow_duration'], bins=30, kde=True)
+plt.title('Distribution of Flow Duration')
+plt.xlabel('Flow Duration')
+plt.ylabel('Frequency')
+plt.show()
+plt.figure(figsize=(15, 6))
+sns.boxplot(x='label', y='Rate', data=Net)
+plt.title('Rate Distribution by Label')
+plt.show()
+
+plt.figure(figsize=(15, 6))
+sns.scatterplot(x='flow_duration', y='Rate', hue='label', data=Net)
+plt.title('Flow Duration vs Rate by Label')
+plt.show()
+plt.figure(figsize=(15, 6))
+sns.countplot(x='label', data=Net)
+plt.title('Count of Labels')
+plt.show()
+
+# Assuming your DataFrame is named df
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=Net)
+plt.xticks(rotation=90)  # Rotate x labels for better visibility
+plt.title('Boxplot for Outlier Detection')
+plt.show()
+# Feature Selection
+### LabelEncoder
+label_encoder = LabelEncoder()
+categorical_columns = ["label"]
+
+for col in categorical_columns:
+    if Net[col].dtype == 'object':
+        Net[col] = label_encoder.fit_transform(Net[col].astype(str))
+Net.head()
+# using coreelation matrix to find the most important features
+
+kl.corr_plot(Net,figsize=(10,20),target='label')
+plt.show()
+from sklearn.feature_selection import SelectKBest, f_regression
+
+# Assuming your target variable is in 'label' and your features are all other columns
+X = Net.drop(columns=['label'])
+y = Net['label']  # Assuming this is your target variable
+
+# Apply SelectKBest
+selector = SelectKBest(score_func=f_regression, k=15)  # Select top 10 features
+X_selected = selector.fit_transform(X, y)
+
+# Get selected feature indices
+selected_indices = selector.get_support(indices=True)
+selected_features = X.columns[selected_indices]
+
+print("Selected Features:", selected_features)
+# Count the number of instances per class
+class_counts = Net['label'].value_counts()
+
+# Display class distribution
+print(class_counts)
+
+# Specify the classes you want to keep
+selected_classes = [6, 7, 8, 9 ,25]  # Modify this list based on your requirement
+
+# Filter the dataset based on the selected classes
+selected_class_data = Net[Net['label'].isin(selected_classes)]
+
+# Save the new dataset with selected classes
+selected_class_data.to_csv('selected_classes_dataset.csv', index=False)
+
+print("New dataset created with specific selected classes.")
+new_tim = pd.read_csv('selected_classes_dataset.csv',low_memory=False)
+new_tim
+X = new_tim[selected_features]
+y = new_tim['label']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=101) 
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+# Generator Network
+class Generator(nn.Module):
+    def __init__(self, input_dim, output_dim):
+        super(Generator, self).__init__()
+        self.model = nn.Sequential(
+            nn.Linear(input_dim, 128),
+            nn.ReLU(),
+            nn.Linear(128, 256),
+            nn.ReLU(),
+            nn.Linear(256, output_dim),
+            nn.Tanh()  # Assuming the output data is normalized
+        )
+    
+    def forward(self, x):
+        return self.model(x)
+
+# Discriminator Network
+class Discriminator(nn.Module):
+    def __init__(self, input_dim):
+        super(Discriminator, self).__init__()
+        self.model = nn.Sequential(
+            nn.Linear(input_dim, 256),
+            nn.ReLU(),
+            nn.Linear(256, 128),
+            nn.ReLU(),
+            nn.Linear(128, 1),
+            nn.Sigmoid()  # Output probability
+        )
+    
+    def forward(self, x):
+        return self.model(x)
+
+# Hyperparameters
+latent_dim = 100
+data_dim = X_train.shape[1]  # Number of features
+batch_size = 64
+epochs = 100
+lr = 0.0002
+
+# Device configuration
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Create GAN models
+generator = Generator(input_dim=latent_dim, output_dim=data_dim).to(device)
+discriminator = Discriminator(input_dim=data_dim).to(device)
+
+# Optimizers
+optimizer_G = optim.Adam(generator.parameters(), lr=lr)
+optimizer_D = optim.Adam(discriminator.parameters(), lr=lr)
+
+# Loss function
+loss_fn = nn.BCELoss()
+
+# Data loader for real samples
+train_loader = DataLoader(TensorDataset(torch.tensor(X_train).float().to(device)), batch_size=batch_size, shuffle=True)
+
+# Training the GAN
+for epoch in range(epochs):
+    for real_samples in train_loader:
+        real_samples = real_samples[0].to(device)  # Move real samples to device
+        batch_size = real_samples.size(0)
+
+        # Real labels
+        real_labels = torch.ones(batch_size, 1).to(device)
+        fake_labels = torch.zeros(batch_size, 1).to(device)
+
+        # Train the discriminator with real data
+        optimizer_D.zero_grad()
+        outputs_real = discriminator(real_samples)
+        real_loss = loss_fn(outputs_real, real_labels)
+
+        # Train the discriminator with fake data
+        noise = torch.randn(batch_size, latent_dim).to(device)
+        fake_samples = generator(noise)
+        outputs_fake = discriminator(fake_samples.detach())  # detach so generator is not updated
+        fake_loss = loss_fn(outputs_fake, fake_labels)
+
+        d_loss = real_loss + fake_loss
+        d_loss.backward()
+        optimizer_D.step()
+
+        # Train the generator
+        optimizer_G.zero_grad()
+        outputs_fake = discriminator(fake_samples)
+        g_loss = loss_fn(outputs_fake, real_labels)  # try to fool the discriminator
+        g_loss.backward()
+        optimizer_G.step()
+
+    if epoch % 10 == 0:
+        print(f"Epoch [{epoch}/{epochs}] | D_loss: {d_loss.item()} | G_loss: {g_loss.item()}")
+
+# Generate synthetic data for the under-represented class (e.g., class 25)
+num_samples = 10000  # Number of synthetic samples you want to generate
+noise = torch.randn(num_samples, latent_dim).to(device)
+synthetic_samples = generator(noise).detach().cpu().numpy()  # Move to CPU for NumPy conversion
+
+# Create synthetic labels for the generated data (e.g., label them as class 25)
+synthetic_labels = np.full((num_samples,), fill_value=25, dtype=int)
+
+# Add synthetic samples to training data
+X_train_augmented = np.vstack([X_train, synthetic_samples])
+y_train_augmented = np.hstack([y_train, synthetic_labels])
+
+# Step 3: Train a classifier using augmented data
+clf = RandomForestClassifier()
+clf.fit(X_train_augmented, y_train_augmented)
+
+# Predictions on test set
+y_pred = clf.predict(X_test)
+
+# Evaluation metrics
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+class_report = classification_report(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+print("Confusion Matrix:\n", conf_matrix)
+print("Classification Report:\n", class_report)
+
+
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.preprocessing import StandardScaler
+
+# Assuming new_tim is your DataFrame and selected_features contains the feature column names
+X = new_tim[selected_features]
+y = new_tim['label']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=101)
+
+# Normalize the data
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Convert to tensors
+X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float32)
+X_test_tensor = torch.tensor(X_test_scaled, dtype=torch.float32)
+y_train_tensor = torch.tensor(y_train.values, dtype=torch.long)
+y_test_tensor = torch.tensor(y_test.values, dtype=torch.long)
+
+# Create DataLoader
+train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+
+# RBM and DBN Classes
+class RBM(nn.Module):
+    def __init__(self, n_visible, n_hidden):
+        super(RBM, self).__init__()
+        self.W = nn.Parameter(torch.randn(n_visible, n_hidden) * 0.1)
+        self.b = nn.Parameter(torch.zeros(n_hidden))
+        self.c = nn.Parameter(torch.zeros(n_visible))
+
+    def sample_h(self, x):
+        h = torch.sigmoid(torch.matmul(x, self.W) + self.b)
+        return h
+
+    def sample_v(self, h):
+        v = torch.sigmoid(torch.matmul(h, self.W.t()) + self.c)
+        return v
+
+    def forward(self, x):
+        h = self.sample_h(x)
+        return h
+
+class DBN(nn.Module):
+    def __init__(self, layer_sizes):
+        super(DBN, self).__init__()
+        self.rbms = nn.ModuleList([RBM(layer_sizes[i], layer_sizes[i+1]) for i in range(len(layer_sizes) - 1)])
+        self.fc = nn.Linear(layer_sizes[-1], len(set(y)))  # Update to match number of classes
+
+    def pretrain(self, data, epochs=10):
+        for rbm in self.rbms:
+            for epoch in range(epochs):
+                for batch in data:
+                    x = batch[0]
+                    # Ensure x is normalized and in range [0, 1]
+                    h = rbm.sample_h(x)
+                    v_reconstructed = rbm.sample_v(h)
+                    # Use BCELoss for reconstruction loss
+                    loss = nn.BCELoss()(v_reconstructed, x)  # Keep this for RBM training
+                    rbm.zero_grad()
+                    loss.backward()
+                    for param in rbm.parameters():
+                        param.data += param.grad.data
+
+    def forward(self, x):
+        for rbm in self.rbms:
+            x = rbm.forward(x)
+        return self.fc(x)
+
+# Initialize and train DBN
+layer_sizes = [X_train.shape[1], 256, 128, 64]  # Adjust sizes as needed
+dbn = DBN(layer_sizes)
+dbn.pretrain(train_loader, epochs=10)
+
+# Train classifier on top of the DBN
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(dbn.parameters(), lr=0.001)
+
+# Training the classifier
+for epoch in range(5):  # Number of epochs for the classifier
+    for data in train_loader:
+        inputs, labels = data
+        optimizer.zero_grad()
+        outputs = dbn(inputs)
+        loss = criterion(outputs, labels)  # Use CrossEntropyLoss here
+        loss.backward()
+        optimizer.step()
+    print(f'Epoch {epoch + 1}, Loss: {loss.item()}')
+
+# Evaluate the model
+with torch.no_grad():
+    outputs = dbn(X_test_tensor)
+    _, predicted = torch.max(outputs.data, 1)
+    accuracy = (predicted == y_test_tensor).sum().item() / y_test_tensor.size(0)
+    print(f'Accuracy: {accuracy * 100:.2f}%')
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, TensorDataset
+
+# Normalize the data
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Convert to tensors
+X_train_tensor = torch.tensor(X_train_scaled, dtype=torch.float32)
+X_test_tensor = torch.tensor(X_test_scaled, dtype=torch.float32)
+
+# Create DataLoader
+train_dataset = TensorDataset(X_train_tensor)
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+
+# Variational Autoencoder Class
+class VAE(nn.Module):
+    def __init__(self, input_dim, hidden_dim, latent_dim):
+        super(VAE, self).__init__()
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.fc21 = nn.Linear(hidden_dim, latent_dim)  # Mean
+        self.fc22 = nn.Linear(hidden_dim, latent_dim)  # Log variance
+        self.fc3 = nn.Linear(latent_dim, hidden_dim)
+        self.fc4 = nn.Linear(hidden_dim, input_dim)
+
+    def encode(self, x):
+        h1 = torch.relu(self.fc1(x))
+        return self.fc21(h1), self.fc22(h1)  # Return mean and log variance
+
+    def reparameterize(self, mu, logvar):
+        std = torch.exp(0.5 * logvar)
+        eps = torch.randn_like(std)
+        return mu + eps * std
+
+    def decode(self, z):
+        h3 = torch.relu(self.fc3(z))
+        return torch.sigmoid(self.fc4(h3))
+
+    def forward(self, x):
+        mu, logvar = self.encode(x.view(-1, X_train.shape[1]))
+        z = self.reparameterize(mu, logvar)
+        return self.decode(z), mu, logvar
+
+# Loss function
+def loss_function(recon_x, x, mu, logvar):
+    BCE = nn.functional.binary_cross_entropy(recon_x, x.view(-1, X_train.shape[1]), reduction='sum')
+    KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+    return BCE + KLD
+
+# Initialize VAE
+vae = VAE(input_dim=X_train.shape[1], hidden_dim=256, latent_dim=20)
+optimizer = optim.Adam(vae.parameters(), lr=0.001)
+
+# Training the VAE
+for epoch in range(10):  # Number of epochs
+    for data in train_loader:
+        optimizer.zero_grad()
+        recon_batch, mu, logvar = vae(data[0])
+        loss = loss_function(recon_batch, data[0], mu, logvar)
+        loss.backward()
+        optimizer.step()
+    print(f'Epoch {epoch + 1}, Loss: {loss.item()}')
+
+# Generate samples to evaluate the VAE
+with torch.no_grad():
+    sample_z = torch.randn(64, 20)  # Generate 64 samples in the latent space
+    sample = vae.decode(sample_z).cpu()
+

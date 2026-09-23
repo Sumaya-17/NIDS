@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aegis5G Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nids-ui.css') }}">
+</head>
+<body>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="d-flex align-items-center gap-3 mb-4" href="{{ url_for('index') }}">
+        <span class="brand-mark">A5</span>
+        <span class="brand-copy">
+          <strong>Aegis5G</strong>
+          <span>AI Security Intelligence</span>
+        </span>
+      </a>
+
+      <p class="sidebar-label">Workspace</p>
+      <nav class="side-nav-grid">
+        <a class="side-link" href="/prediction"><i class="side-icon" data-lucide="radar"></i>Prediction</a>
+        <a class="side-link" href="/graph1"><i class="side-icon" data-lucide="bar-chart-3"></i>Attack Counts</a>
+        <a class="side-link" href="/graph2"><i class="side-icon" data-lucide="activity"></i>Packet Histogram</a>
+        <a class="side-link" href="/graph3"><i class="side-icon" data-lucide="timer"></i>Flow Duration</a>
+        <a class="side-link" href="/graph4"><i class="side-icon" data-lucide="pie-chart"></i>Attack Share</a>
+      </nav>
+
+      <p class="sidebar-label">Account</p>
+      <a class="side-link" href="/logout" onclick="return confirm('Are you sure you want to logout?')">
+        <i class="side-icon" data-lucide="log-out"></i>Logout
+      </a>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow mb-1">Aegis5G Intelligence Platform</p>
+          <h1 class="h3 fw-bold mb-0">{% block page_title %}Detection Workspace{% endblock page_title %}</h1>
+        </div>
+        <span class="status-pill"><span class="status-pulse"></span>AI Monitoring Online</span>
+      </header>
+
+      <section class="content-panel">
+        <div class="panel-pad">
+          {% block content %}{% endblock content %}
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="{{ url_for('static', filename='js/nids-ui.js') }}"></script>
+  {% block scripts %}{% endblock scripts %}
+</body>
+</html>

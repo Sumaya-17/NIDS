@@ -1,0 +1,617 @@
+{% extends "base_tem.html" %}
+
+{% block page_title %}AI Threat Prediction{% endblock page_title %}
+
+{% block content %}
+<div class="mb-4">
+  <p class="eyebrow fw-bold mb-2">Aegis5G Intelligence Engine</p>
+  <h2 class="h4 fw-bold mb-2">Classify a network flow</h2>
+  <p class="text-muted-soft mb-0">Enter the same CICIDS feature values used by the existing model. The submitted payload still posts to the original Flask `/result` route.</p>
+</div>
+<div class="stats-grid">
+  <div class="stat-card">
+    <span>Total Traffic Analyzed</span>
+    <strong>1.7M+</strong>
+    <div class="mini-progress"><span style="width: 82%"></span></div>
+  </div>
+  <div class="stat-card">
+    <span>Active Threats</span>
+    <strong>6</strong>
+    <div class="mini-progress"><span style="width: 46%"></span></div>
+  </div>
+  <div class="stat-card">
+    <span>Detection Accuracy</span>
+    <strong>99.2%</strong>
+    <div class="mini-progress"><span style="width: 99%"></span></div>
+  </div>
+  <div class="stat-card">
+    <span>Suspicious Packets</span>
+    <strong>128K</strong>
+    <div class="mini-progress"><span style="width: 68%"></span></div>
+  </div>
+  <div class="stat-card">
+    <span>AI Monitoring</span>
+    <strong>Online</strong>
+    <div class="mini-progress"><span style="width: 100%"></span></div>
+  </div>
+</div>
+
+<div class="prediction-layout">
+<div>
+<form class="prediction-form" method="POST" action="/result">
+  <div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Destination Port</label>
+            <input type="text" class="form-control" name="Destination_Port" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow Duration</label>
+            <input type="text" class="form-control" name="Flow_Duration" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Total Fwd Packets</label>
+            <input type="text" class="form-control" name="Total_Fwd_Packets" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Total Backward Packets</label>
+            <input type="text" class="form-control" name="Total_Backward_Packets" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Total Length of Fwd Packets</label>
+            <input type="text" class="form-control" name="Total_Length_of_Fwd_Packets" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Total Length of Bwd Packets</label>
+            <input type="text" class="form-control" name="Total_Length_of_Bwd_Packets" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Packet Length Max</label>
+            <input type="text" class="form-control" name="Fwd_Packet_Length_Max" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Packet Length Min</label>
+            <input type="text" class="form-control" name="Fwd_Packet_Length_Min" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Packet Length Mean</label>
+            <input type="text" class="form-control" name="Fwd_Packet_Length_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Packet Length Std</label>
+            <input type="text" class="form-control" name="Fwd_Packet_Length_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Packet Length Max</label>
+            <input type="text" class="form-control" name="Bwd_Packet_Length_Max" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Packet Length Min</label>
+            <input type="text" class="form-control" name="Bwd_Packet_Length_Min" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Packet Length Mean</label>
+            <input type="text" class="form-control" name="Bwd_Packet_Length_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Packet Length Std</label>
+            <input type="text" class="form-control" name="Bwd_Packet_Length_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow Bytes/s</label>
+            <input type="text" class="form-control" name="Flow_Bytes/s" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow Packets/s</label>
+            <input type="text" class="form-control" name="Flow_Packets/s" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow IAT Mean</label>
+            <input type="text" class="form-control" name="Flow_IAT_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow IAT Std</label>
+            <input type="text" class="form-control" name="Flow_IAT_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow IAT Max</label>
+            <input type="text" class="form-control" name="Flow_IAT_Max" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Flow IAT Min</label>
+            <input type="text" class="form-control" name="Flow_IAT_Min" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd IAT Total</label>
+            <input type="text" class="form-control" name="Fwd_IAT_Total" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd IAT Mean</label>
+            <input type="text" class="form-control" name="Fwd_IAT_Mean" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd IAT Std</label>
+            <input type="text" class="form-control" name="Fwd_IAT_Std" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd IAT Max</label>
+            <input type="text" class="form-control" name="Fwd_IAT_Max" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd IAT Min</label>
+            <input type="text" class="form-control" name="Fwd_IAT_Min" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd IAT Total</label>
+            <input type="text" class="form-control" name="Bwd_IAT_Total" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd IAT Mean</label>
+            <input type="text" class="form-control" name="Bwd_IAT_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd IAT Std</label>
+            <input type="text" class="form-control" name="Bwd_IAT_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd IAT Max</label>
+            <input type="text" class="form-control" name="Bwd_IAT_Max" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd IAT Min</label>
+            <input type="text" class="form-control" name="Bwd_IAT_Min" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd PSH Flags</label>
+            <input type="text" class="form-control" name="Fwd_PSH_Flags" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd URG Flags</label>
+            <input type="text" class="form-control" name="Fwd_URG_Flags" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Header Length</label>
+            <input type="text" class="form-control" name="Fwd_Header_Length" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Header Length</label>
+            <input type="text" class="form-control" name="Bwd_Header_Length" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Packets/s</label>
+            <input type="text" class="form-control" name="Fwd_Packets/s" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Packets/s</label>
+            <input type="text" class="form-control" name="Bwd_Packets/s" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Min Packet Length</label>
+            <input type="text" class="form-control" name="Min_Packet_Length" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Max Packet Length</label>
+            <input type="text" class="form-control" name="Max_Packet_Length" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Packet Length Mean</label>
+            <input type="text" class="form-control" name="Packet_Length_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Packet Length Std</label>
+            <input type="text" class="form-control" name="Packet_Length_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Packet Length Variance</label>
+            <input type="text" class="form-control" name="Packet_Length_Variance" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">FIN Flag Count</label>
+            <input type="text" class="form-control" name="FIN_Flag_Count" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">SYN Flag Count</label>
+            <input type="text" class="form-control" name="SYN_Flag_Count" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">RST Flag Count</label>
+            <input type="text" class="form-control" name="RST_Flag_Count" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">PSH Flag Count</label>
+            <input type="text" class="form-control" name="PSH_Flag_Count" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">ACK Flag Count</label>
+            <input type="text" class="form-control" name="ACK_Flag_Count" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">URG Flag Count</label>
+            <input type="text" class="form-control" name="URG_Flag_Count" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">CWE Flag Count</label>
+            <input type="text" class="form-control" name="CWE_Flag_Count" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">ECE Flag Count</label>
+            <input type="text" class="form-control" name="ECE_Flag_Count" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Down/Up Ratio</label>
+            <input type="text" class="form-control" name="Down/Up_Ratio" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Average Packet Size</label>
+            <input type="text" class="form-control" name="Average_Packet_Size" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Avg Fwd Segment Size</label>
+            <input type="text" class="form-control" name="Avg_Fwd_Segment_Size" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Avg Bwd Segment Size</label>
+            <input type="text" class="form-control" name="Avg_Bwd_Segment_Size" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Header Length.1</label>
+            <input type="text" class="form-control" name="Fwd_Header_Length.1" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Avg Bytes/Bulk</label>
+            <input type="text" class="form-control" name="Fwd_Avg_Bytes/Bulk" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Avg Packets/Bulk</label>
+            <input type="text" class="form-control" name="Fwd_Avg_Packets/Bulk" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Fwd Avg Bulk Rate</label>
+            <input type="text" class="form-control" name="Fwd_Avg_Bulk_Rate" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Avg Bytes/Bulk</label>
+            <input type="text" class="form-control" name="Bwd_Avg_Bytes/Bulk" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Avg Packets/Bulk</label>
+            <input type="text" class="form-control" name="Bwd_Avg_Packets/Bulk" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Bwd Avg Bulk Rate</label>
+            <input type="text" class="form-control" name="Bwd_Avg_Bulk_Rate" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Subflow Fwd Packets</label>
+            <input type="text" class="form-control" name="Subflow_Fwd_Packets" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Subflow Fwd Bytes</label>
+            <input type="text" class="form-control" name="Subflow_Fwd_Bytes" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Subflow Bwd Packets</label>
+            <input type="text" class="form-control" name="Subflow_Bwd_Packets" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Subflow Bwd Bytes</label>
+            <input type="text" class="form-control" name="Subflow_Bwd_Bytes" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Init_Win_bytes_forward</label>
+            <input type="text" class="form-control" name="Init_Win_bytes_forward" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Init_Win_bytes_backward</label>
+            <input type="text" class="form-control" name="Init_Win_bytes_backward" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">act_data_pkt_fwd</label>
+            <input type="text" class="form-control" name="act_data_pkt_fwd" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">min_seg_size_forward</label>
+            <input type="text" class="form-control" name="min_seg_size_forward" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Active Mean</label>
+            <input type="text" class="form-control" name="Active_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Active Std</label>
+            <input type="text" class="form-control" name="Active_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Active Max</label>
+            <input type="text" class="form-control" name="Active_Max" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Active Min</label>
+            <input type="text" class="form-control" name="Active_Min" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Idle Mean</label>
+            <input type="text" class="form-control" name="Idle_Mean" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Idle Std</label>
+            <input type="text" class="form-control" name="Idle_Std" />
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Idle Max</label>
+            <input type="text" class="form-control" name="Idle_Max" />
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-outline">
+            <label class="form-label">Idle Min</label>
+            <input type="text" class="form-control" name="Idle_Min" />
+        </div>
+    </div>
+</div>
+  <div class="d-flex justify-content-end mt-4">
+    <button type="submit" class="btn btn-primary btn-lg">Predict Attack Type</button>
+  </div>
+  </form>
+</div>
+<aside class="live-panel">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <p class="eyebrow mb-1">Live monitoring</p>
+      <h3 class="h5 fw-bold mb-0">Signal Health</h3>
+    </div>
+    <span class="status-pill"><span class="status-pulse"></span>Active</span>
+  </div>
+  <div class="signal-row">
+    <span class="text-muted-soft">Packet Stream</span>
+    <strong>Stable</strong>
+  </div>
+  <div class="signal-row">
+    <span class="text-muted-soft">AI Classifier</span>
+    <strong>Ready</strong>
+  </div>
+  <div class="signal-row">
+    <span class="text-muted-soft">Risk Engine</span>
+    <strong>Armed</strong>
+  </div>
+  <div class="signal-row">
+    <span class="text-muted-soft">Prediction Route</span>
+    <strong>/result</strong>
+  </div>
+  <div class="chart-card mt-4">
+    <span>AI Prediction Insights</span>
+    <strong>Real-time</strong>
+    <div class="preview-chart mt-3" style="height: 92px">
+      <span class="preview-bar" style="height: 48%"></span>
+      <span class="preview-bar" style="height: 76%"></span>
+      <span class="preview-bar" style="height: 58%"></span>
+      <span class="preview-bar" style="height: 88%"></span>
+      <span class="preview-bar" style="height: 64%"></span>
+    </div>
+  </div>
+</aside>
+</div>
+{% endblock content %}
+

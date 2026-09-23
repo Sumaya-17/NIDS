@@ -1,0 +1,73 @@
+{% extends 'base_tem.html' %}
+
+{% block page_title %}Packet Histogram{% endblock page_title %}
+
+{% block content %}
+<div class="mb-4">
+  <p class="eyebrow fw-bold mb-2">Packet analytics</p>
+  <h2 class="h4 fw-bold mb-2">Minimum packet length distribution</h2>
+  <p class="text-muted-soft mb-0">Elegant histogram view generated from the existing Flask Plotly route.</p>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="stat-card">
+      <span>Packet Histogram</span>
+      <strong>Flow Density</strong>
+      <div class="mini-progress"><span style="width: 72%"></span></div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card">
+      <span>Traffic Profile</span>
+      <strong>Min Length</strong>
+      <div class="mini-progress"><span style="width: 58%"></span></div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="stat-card">
+      <span>AI Signal</span>
+      <strong>Normalized</strong>
+      <div class="mini-progress"><span style="width: 86%"></span></div>
+    </div>
+  </div>
+</div>
+<div class="plot-frame chart-card" id="plot"></div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  var plotData = {{ plot_json | safe }};
+  plotData.layout.paper_bgcolor = 'rgba(15, 23, 42, 0)';
+  plotData.layout.plot_bgcolor = 'rgba(15, 23, 42, 0)';
+  plotData.layout.font = { color: '#F8FAFC' };
+  plotData.layout.title = {
+    text: 'Packet Histogram Intelligence',
+    font: { color: '#F8FAFC', size: 22 }
+  };
+  plotData.layout.margin = { l: 60, r: 24, t: 70, b: 70 };
+  plotData.layout.xaxis = Object.assign({}, plotData.layout.xaxis, {
+    gridcolor: 'rgba(148, 163, 184, 0.12)',
+    linecolor: 'rgba(6, 182, 212, 0.32)',
+    zerolinecolor: 'rgba(6, 182, 212, 0.18)',
+    tickfont: { color: '#CBD5E1' },
+    titlefont: { color: '#F8FAFC' }
+  });
+  plotData.layout.yaxis = Object.assign({}, plotData.layout.yaxis, {
+    gridcolor: 'rgba(148, 163, 184, 0.12)',
+    linecolor: 'rgba(6, 182, 212, 0.32)',
+    zerolinecolor: 'rgba(6, 182, 212, 0.18)',
+    tickfont: { color: '#CBD5E1' },
+    titlefont: { color: '#F8FAFC' }
+  });
+  if (plotData.data && plotData.data[0]) {
+    plotData.data[0].marker = {
+      color: '#06B6D4',
+      line: { color: '#7C3AED', width: 1.4 },
+      opacity: 0.82
+    };
+    plotData.data[0].hovertemplate = 'Packet length: %{x}<br>Count: %{y}<extra>Aegis5G</extra>';
+  }
+  Plotly.newPlot('plot', plotData.data, plotData.layout, { responsive: true, displayModeBar: false });
+</script>
+{% endblock scripts %}
