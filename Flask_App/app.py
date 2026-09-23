@@ -1,8 +1,10 @@
 from pathlib import Path
+import os
 
 from flask import Flask , redirect , url_for , request , render_template, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from sqlalchemy import text
 import pickle
 import pandas as pd
 import plotly.express as px
@@ -13,8 +15,19 @@ GRAPH_DATA_PATH = BASE_DIR / 'data' / 'cicids2017_sample.csv'
 
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = __import__('os').environ.get('SECRET_KEY', 'development-only-secret')
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{BASE_DIR / 'instance' / 'users.db'}"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'development-only-secret')
+
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql+psycopg://', 1)
+    elif database_url.startswith('postgresql://'):
+        database_url = database_url.replace('postgresql://', 'postgresql+psycopg://', 1)
+else:
+    database_url = f"sqlite:///{BASE_DIR / 'instance' / 'users.db'}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True}
 db = SQLAlchemy(app)
 app.static_folder = str(BASE_DIR / 'static')
 app.config['STATIC_FOLDER'] = str(BASE_DIR / 'static')
@@ -37,7 +50,12 @@ def index():
 
 @app.route('/health')
 def health():
-    return {'status': 'ok'}
+    try:
+        db.session.execute(text('SELECT 1'))
+        return {'status': 'ok', 'database': 'connected'}
+    except Exception:
+        db.session.rollback()
+        return {'status': 'degraded', 'database': 'unavailable'}, 503
 
 
 

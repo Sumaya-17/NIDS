@@ -1,5 +1,24 @@
 Project Topic - Network intrusion detection using flask and machine learning.
 
+Deployment notes
+----------------
+The local execution steps below are unchanged. Local runs use the existing
+SQLite database at Flask_App/instance/users.db when DATABASE_URL is not set.
+
+Render deployment uses PostgreSQL automatically through render.yaml. The full
+CICIDS2017 CSV is stored with Git LFS because it is larger than GitHub's normal
+file limit. Flask_App/data/cicids2017_sample.csv is the smaller graph sample
+used by the deployed dashboard; the full dataset remains available for the
+notebook and training workflows.
+
+To migrate the existing local users to the Render PostgreSQL database, set
+DATABASE_URL to the internal Render database connection string and run from
+Flask_App:
+
+        python migrate_sqlite_to_postgres.py
+
+The migration is additive and does not overwrite users already in PostgreSQL.
+
 Open anaconda Promt ---
 Type - cd Path_of_SourceCode
 Enter
